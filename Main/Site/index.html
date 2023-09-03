@@ -3,24 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Website</title>
+    <title>Movie Guessing Game</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
+            margin: 50px;
         }
 
-        #container {
-            margin-top: 50px;
-        }
-
-        input {
+        #input-box {
             padding: 10px;
-            margin: 10px;
             font-size: 16px;
         }
 
-        #output {
+        #suggestions {
             font-size: 18px;
             font-weight: bold;
             margin-top: 20px;
@@ -28,26 +24,59 @@
     </style>
 </head>
 <body>
-    <div id="container">
-        <h1>Simple Website with Two Input Boxes</h1>
-        <input type="text" id="input1" placeholder="weight_avg_rating">
-        <input type="text" id="input2" placeholder="weight_num_ratings">
-        <button onclick="calculate()">Calculate</button>
-        <div id="output"></div>
-    </div>
+    <h1>Guess Your Favorite Movie</h1>
+    <input type="text" id="input-box" placeholder="Enter your favorite movie">
+    <div id="suggestions"></div>
 
     <script>
-        function calculate() {
-            const input1 = document.getElementById('input1').value;
-            const input2 = document.getElementById('input2').value;
+        document.addEventListener("DOMContentLoaded", function() {
+            // Array to store movie titles
+            let movieTitles = [];
 
-            // Simple example: Sum the two input values
-            const result = parseFloat(input1) + parseFloat(input2);
+            // Load the CSV file containing movie titles
+            fetch('movies.csv')
+                .then(response => response.text())
+                .then(data => {
+                    // Parse the CSV data into an array of rows
+                    const rows = data.split('\n');
 
-            // Display the result
-            const output = document.getElementById('output');
-            output.textContent = `Result: ${result}`;
-        }
+                    // Extract titles from the "title" column and store them in the movieTitles array
+                    for (const row of rows) {
+                        const columns = row.split(',');
+                        if (columns.length >= 2) { // Ensure there are at least two columns (movieId and title)
+                            const title = columns[1].trim().toLowerCase(); // Extract title from the second column
+                            movieTitles.push(title);
+                        }
+                    }
+
+                    // Get the input element
+                    const inputBox = document.getElementById('input-box');
+
+                    // Get the suggestions element
+                    const suggestions = document.getElementById('suggestions');
+
+                    // Event listener for input changes
+                    inputBox.addEventListener('input', () => {
+                        const userInput = inputBox.value.toLowerCase();
+                        const matchedMovies = [];
+
+                        // Find movies that match the user's input
+                        for (const title of movieTitles) {
+                            if (title.includes(userInput)) {
+                                matchedMovies.push(title);
+                            }
+                        }
+
+                        // Display suggestions
+                        if (userInput.length > 0) {
+                            suggestions.innerHTML = matchedMovies.join('<br>');
+                        } else {
+                            suggestions.innerHTML = '';
+                        }
+                    });
+                })
+                .catch(error => console.error(error));
+        });
     </script>
 </body>
 </html>

@@ -21,6 +21,9 @@ avg_rating['combined_score'] = (avg_rating['rating'] * weight_avg_rating) + (avg
 # Sort by the combined score in descending order
 top_movies = avg_rating.sort_values(by='combined_score', ascending=False).head(10)
 
+# Create new file with users favorite movies
+top_movies.to_csv('Main/top_movies.csv')
+
 # Print the top 10 movies based on the combined score
 print("Top 10 best movies:")
 print(top_movies)
