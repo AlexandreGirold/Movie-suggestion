@@ -12,7 +12,7 @@ avg_rating = pd.DataFrame(merged_df.groupby('title')['rating'].mean())
 avg_rating['num_ratings'] = pd.DataFrame(merged_df.groupby('title')['rating'].count())
 
 # Define weights for the parameters (you can adjust these values)
-weight_avg_rating = 200
+weight_avg_rating = 250
 weight_num_ratings = 0.01
 
 # Calculate a combined score
