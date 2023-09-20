@@ -17,3 +17,5 @@ it has 10.5 million computed tag-movie relevance scores from a pool of 1,084 tag
 pip3 install numpy pandas matplotlib seaborn scikit-learn
 ```
 
+soon news
+
